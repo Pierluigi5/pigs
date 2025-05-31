@@ -18,8 +18,10 @@
     html, body {
       height: 100%;
       background-color: #f8edeb;
+      /* Usa il font di sistema: San Francisco, Segoe UI, Roboto, ecc. */
+      font-family: system-ui, sans-serif;
       color: #ffafcc;
-font-family: system-ui, sans-serif;      overflow: hidden;
+      overflow: hidden;
     }
 
     /* -------------------------------------------------------
@@ -48,11 +50,16 @@ font-family: system-ui, sans-serif;      overflow: hidden;
       object-fit: contain;
     }
 
+    /* -------------------------------------------------------
+       TITOLO SU DUE RIGHE
+       - Ogni .title-line è già display:block → va su riga nuova
+       - line-height = 1 per minimizzare lo spazio tra righe
+    ------------------------------------------------------- */
     .title-line {
       display: block;
       font-size: 2rem;
       font-weight: bold;
-      line-height: 1.1;
+      line-height: 1;  /* ← “Stringi” qui se vuoi meno distanza */
       margin: 0;
       padding: 0;
     }
@@ -161,13 +168,14 @@ font-family: system-ui, sans-serif;      overflow: hidden;
         alt="Maialino festoso" />
     </div>
     <h1>
-      <span class="title-line">З Днем</span><br/>
+      <!-- RIMOSSO IL <br/>, i due span vanno automaticamente su righe diverse -->
+      <span class="title-line">З Днем</span>
       <span class="title-line">народження, Бейлі!</span>
     </h1>
   </div>
 
   <!-- Bottone per avviare la musica -->
-  <button id="play-button">🔊 Avvia Musica</button>
+  <button id="play-button">Пісня</button>
 
   <!-- Audio: senza autoplay, con playsinline e preload -->
   <audio
@@ -180,7 +188,7 @@ font-family: system-ui, sans-serif;      overflow: hidden;
 
   <script>
     /****************************************************
-      FUNZIONE PER UN VALORE RANDOM FRA DUE NUMERI
+      FUNZIONE PER OTTENERE UN NUMERO RANDOM
     ****************************************************/
     function getRandom(min, max) {
       return Math.random() * (max - min) + min;
@@ -197,7 +205,6 @@ font-family: system-ui, sans-serif;      overflow: hidden;
       const confetti = document.createElement('div');
       confetti.classList.add('confetti');
 
-      // Color e dimensioni random
       const color = colors[Math.floor(Math.random() * colors.length)];
       const width = getRandom(4, 14);
       const height = width / 2;
@@ -228,7 +235,7 @@ font-family: system-ui, sans-serif;      overflow: hidden;
       }
     });
 
-    // 3) Pavimento (pezzi a terra)
+    // 3) Pavimento
     const floorContainer = document.createElement('div');
     floorContainer.classList.add('floor');
     document.body.appendChild(floorContainer);
@@ -257,32 +264,20 @@ font-family: system-ui, sans-serif;      overflow: hidden;
     const audio = document.getElementById('birthday-audio');
     const playButton = document.getElementById('play-button');
 
-    // 1) Al caricamento della pagina: non tentiamo l'autoplay,
-    //    mostriamo semplicemente il pulsante.
+    // Mostra sempre il pulsante all’avvio
     window.addEventListener('load', () => {
       playButton.style.display = 'block';
     });
 
-    // 2) Quando l’utente clicca sul pulsante, facciamo partire l’audio.
+    // Quando l’utente clicca, avvia l’audio e nasconde il pulsante
     playButton.addEventListener('click', async () => {
       try {
         await audio.play();
-        // Se l’audio parte correttamente, nascondi il pulsante:
         playButton.style.display = 'none';
       } catch (err) {
         console.error("Impossibile riprodurre l’audio:", err);
-        // Se qualcosa va storto, potremmo mostrare un messaggio di errore
       }
     });
-
-    /****************************************************
-      NOTA PER IL DISPENDIO SU GITHUB PAGES:
-      - Assicurati che il file "musica.mp3" si trovi 
-        NELLA STESSA CARTELLA DI "index.html".
-      - Quindi, quando navighi su:
-          https://TUO_USERNAME.github.io/NOME_REPO/
-        il browser troverà subito "musica.mp3" in /musica.mp3.
-    ****************************************************/
   </script>
 </body>
 </html>
