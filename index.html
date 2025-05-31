@@ -4,7 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Auguri di Compleanno</title>
+
   <style>
+    /* -------------------------------------------------------
+       RESET E STILI GLOBALI
+    ------------------------------------------------------- */
     * {
       margin: 0;
       padding: 0;
@@ -19,6 +23,9 @@
       overflow: hidden;
     }
 
+    /* -------------------------------------------------------
+       CONTENITORE CENTRALE
+    ------------------------------------------------------- */
     .center-container {
       position: absolute;
       top: 50%;
@@ -51,7 +58,30 @@
       padding: 0;
     }
 
-    /* Effetto confetti */
+    /* -------------------------------------------------------
+       PULSANTE “Avvia Musica”
+    ------------------------------------------------------- */
+    #play-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 3;
+      padding: 10px 20px;
+      background-color: #ffafcc;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    #play-button:hover {
+      background-color: #ff94b0;
+    }
+
+    /* -------------------------------------------------------
+       OVERLAY PER CONFETTI/EMOJI
+    ------------------------------------------------------- */
     .overlay {
       position: fixed;
       top: 0;
@@ -63,15 +93,20 @@
       overflow: hidden;
     }
 
-    .confetti, .emoji {
+    .confetti,
+    .emoji {
       position: absolute;
       top: -50px;
-      width: 10px;
-      height: 5px;
       opacity: 0.9;
-      border-radius: 2px;
       animation: floatDown linear infinite;
       z-index: 0;
+    }
+
+    .confetti {
+      width: 10px;
+      height: 5px;
+      background-color: #FFD700;
+      border-radius: 2px;
     }
 
     .emoji {
@@ -81,10 +116,19 @@
     }
 
     @keyframes floatDown {
-      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(100vh) rotate(360deg); opacity: 0.3; }
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0.3;
+      }
     }
 
+    /* -------------------------------------------------------
+       “PAVIMENTO” (pezzi colorati a terra)
+    ------------------------------------------------------- */
     .floor {
       position: absolute;
       bottom: 0;
@@ -107,93 +151,139 @@
 </head>
 <body>
 
-  <!-- Overlay con effetti -->
+  <!-- Overlay animazioni -->
   <div class="overlay" id="overlay"></div>
 
   <!-- Contenitore centrale -->
   <div class="center-container">
     <div class="pig">
-      <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcXA4azJ6cXdxYnlrbm1ibWU2a2c2cjY2YXIwOW5ycnluNGQ3a2JidyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/djdIFNI6MFup2/giphy.gif"  alt="Maialino festoso" />
+      <img
+        src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcXA4azJ6cXdxYnlrbm1ibWU2a2c2cjY2YXIwOW5ycnluNGQ3a2JidyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/djdIFNI6MFup2/giphy.gif"
+        alt="Maialino festoso" />
     </div>
     <h1>
-      <span class="title-line">З Дем</span><br/>
+      <span class="title-line">З Днем</span><br/>
       <span class="title-line">народження, Бейлі!</span>
     </h1>
   </div>
 
   <!-- Bottone per avviare la musica -->
-  <button id="play-button" style="position: absolute; top: 20px; left: 20px; z-index: 3; padding: 10px 20px; background-color: #ffafcc; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">🔊 Avvia Musica</button>
+  <button id="play-button">🔊 Avvia Musica</button>
 
-  <!-- Audio -->
-  <audio id="birthday-audio" src="/musica.mp3" loop playsinline></audio>
+  <!-- Audio: senza autoplay, con playsinline e preload -->
+  <audio
+    id="birthday-audio"
+    src="musica.mp3"
+    loop
+    playsinline
+    preload="auto"
+  ></audio>
 
   <script>
+    /****************************************************
+      FUNZIONE PER UN VALORE RANDOM FRA DUE NUMERI
+    ****************************************************/
+    function getRandom(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    /****************************************************
+      CREAZIONE DELLE ANIMAZIONI (CONFETTI, EMOJI, PAVIMENTO)
+    ****************************************************/
     const colors = ['#FFB6C1', '#FFD700', '#98FB98', '#87CEEB', '#DDA0DD'];
     const overlay = document.getElementById('overlay');
 
-    // Confetti
+    // 1) Confetti
     for (let i = 0; i < 70; i++) {
       const confetti = document.createElement('div');
       confetti.classList.add('confetti');
-      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      confetti.style.left = Math.random() * 100 + '%';
-      confetti.style.width = Math.random() * 10 + 4 + 'px';
-      confetti.style.height = (Math.random() * 10 + 4)/2 + 'px';
-      confetti.style.animationDuration = Math.random() * 3 + 3 + 's';
-      confetti.style.animationDelay = Math.random() * 2 + 's';
-      confetti.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
+
+      // Color e dimensioni random
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const width = getRandom(4, 14);
+      const height = width / 2;
+
+      confetti.style.backgroundColor = color;
+      confetti.style.width = `${width}px`;
+      confetti.style.height = `${height}px`;
+      confetti.style.left = `${getRandom(0, 100)}%`;
+      confetti.style.transform = `rotate(${getRandom(0, 360)}deg)`;
+      confetti.style.animationDuration = `${getRandom(3, 6)}s`;
+      confetti.style.animationDelay = `${getRandom(0, 2)}s`;
+
       overlay.appendChild(confetti);
     }
 
-    // Emoji a tema
+    // 2) Emoji
     const emojis = ['🎂', '🎉', '🐷', '🎈'];
-    emojis.forEach(emoji => {
+    emojis.forEach(emojiChar => {
       for (let i = 0; i < 5; i++) {
         const span = document.createElement('div');
-        span.className = 'emoji';
-        span.innerText = emoji;
-        span.style.left = Math.random() * 100 + '%';
-        span.style.animationDuration = Math.random() * 3 + 3 + 's';
-        span.style.animationDelay = Math.random() * 2 + 's';
-        span.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
+        span.classList.add('emoji');
+        span.innerText = emojiChar;
+        span.style.left = `${getRandom(0, 100)}%`;
+        span.style.transform = `rotate(${getRandom(0, 360)}deg)`;
+        span.style.animationDuration = `${getRandom(3, 6)}s`;
+        span.style.animationDelay = `${getRandom(0, 2)}s`;
         overlay.appendChild(span);
       }
     });
 
-    // Accumulo sul fondo
+    // 3) Pavimento (pezzi a terra)
     const floorContainer = document.createElement('div');
-    floorContainer.className = 'floor';
+    floorContainer.classList.add('floor');
     document.body.appendChild(floorContainer);
 
     for (let i = 0; i < 40; i++) {
       const piece = document.createElement('div');
-      piece.className = 'floor-piece';
-      piece.style.left = Math.random() * 100 + '%';
-      piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      piece.style.width = Math.random() * 8 + 4 + 'px';
-      piece.style.height = (Math.random() * 4 + 2) + 'px';
-      piece.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
+      piece.classList.add('floor-piece');
+
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const w = getRandom(4, 12);
+      const h = getRandom(2, 6);
+      const rot = getRandom(0, 360);
+
+      piece.style.backgroundColor = color;
+      piece.style.width = `${w}px`;
+      piece.style.height = `${h}px`;
+      piece.style.transform = `rotate(${rot}deg)`;
+      piece.style.left = `${getRandom(0, 100)}%`;
+
       floorContainer.appendChild(piece);
     }
 
-    // Riproduzione musica
+    /****************************************************
+      GESTIONE DELL’AUDIO
+    ****************************************************/
     const audio = document.getElementById('birthday-audio');
     const playButton = document.getElementById('play-button');
 
-    window.addEventListener('load', async () => {
+    // 1) Al caricamento della pagina: non tentiamo l'autoplay,
+    //    mostriamo semplicemente il pulsante.
+    window.addEventListener('load', () => {
+      playButton.style.display = 'block';
+    });
+
+    // 2) Quando l’utente clicca sul pulsante, facciamo partire l’audio.
+    playButton.addEventListener('click', async () => {
       try {
         await audio.play();
+        // Se l’audio parte correttamente, nascondi il pulsante:
         playButton.style.display = 'none';
       } catch (err) {
-        console.log("Autoplay bloccato", err);
-        playButton.style.display = 'block';
+        console.error("Impossibile riprodurre l’audio:", err);
+        // Se qualcosa va storto, potremmo mostrare un messaggio di errore
       }
     });
 
-    playButton.addEventListener('click', async () => {
-      await audio.play();
-      playButton.style.display = 'none';
-    });
+    /****************************************************
+      NOTA PER IL DISPENDIO SU GITHUB PAGES:
+      - Assicurati che il file "musica.mp3" si trovi 
+        NELLA STESSA CARTELLA DI "index.html".
+      - Quindi, quando navighi su:
+          https://TUO_USERNAME.github.io/NOME_REPO/
+        il browser troverà subito "musica.mp3" in /musica.mp3.
+    ****************************************************/
   </script>
 </body>
 </html>
