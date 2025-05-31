@@ -42,16 +42,11 @@
       object-fit: contain;
     }
 
-    .title {
-      font-size: 2rem;
-      font-weight: bold;
-      line-height: 1;
-      text-align: center;
-      display: block;
-    }
-
     .title-line {
       display: block;
+      font-size: 2rem;
+      font-weight: bold;
+      line-height: 1.1;
       margin: 0;
       padding: 0;
     }
@@ -121,13 +116,16 @@
       <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcXA4azJ6cXdxYnlrbm1ibWU2a2c2cjY2YXIwOW5ycnluNGQ3a2JidyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/djdIFNI6MFup2/giphy.gif"  alt="Maialino festoso" />
     </div>
     <h1>
-      <span class="title title-line">З Днем</span><br/>
-      <span class="title title-line">народження, Бейлі!</span>
+      <span class="title-line">З Дем</span><br/>
+      <span class="title-line">народження, Бейлі!</span>
     </h1>
   </div>
 
+  <!-- Bottone per avviare la musica -->
+  <button id="play-button" style="position: absolute; top: 20px; left: 20px; z-index: 3; padding: 10px 20px; background-color: #ffafcc; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">🔊 Avvia Musica</button>
+
   <!-- Audio -->
-  <audio id="birthday-audio" src="/musica.mp3" autoplay loop playsinline></audio>
+  <audio id="birthday-audio" src="/musica.mp3" loop playsinline></audio>
 
   <script>
     const colors = ['#FFB6C1', '#FFD700', '#98FB98', '#87CEEB', '#DDA0DD'];
@@ -180,15 +178,22 @@
 
     // Riproduzione musica
     const audio = document.getElementById('birthday-audio');
-    const playAudio = async () => {
+    const playButton = document.getElementById('play-button');
+
+    window.addEventListener('load', async () => {
       try {
         await audio.play();
+        playButton.style.display = 'none';
       } catch (err) {
-        console.log("Autoplay bloccato. Devi interagire prima.");
+        console.log("Autoplay bloccato", err);
+        playButton.style.display = 'block';
       }
-    };
+    });
 
-    window.addEventListener('click', playAudio, { once: true });
+    playButton.addEventListener('click', async () => {
+      await audio.play();
+      playButton.style.display = 'none';
+    });
   </script>
 </body>
 </html>
