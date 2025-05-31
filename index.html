@@ -4,12 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Auguri di Compleanno</title>
-  <!-- Font Google -->
-  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* -------------------------------------------------------
-       RESET E STILI GLOBALI
-    ------------------------------------------------------- */
     * {
       margin: 0;
       padding: 0;
@@ -17,117 +12,86 @@
     }
 
     html, body {
-      min-height: 100vh;
+      height: 100%;
       background-color: #f8edeb;
       color: #ffafcc;
       font-family: 'Comic Neue', cursive, sans-serif;
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    .center-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       text-align: center;
-      padding: 1rem;
-      position: relative;
+      z-index: 2;
+      width: 90%;
+      max-width: 400px;
     }
 
-    /* -------------------------------------------------------
-       OVERLAY PER CONFETTI/EMOJI (sempre a schermo intero)
-    ------------------------------------------------------- */
-    #overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none; /* Non blocca interazioni */
-      z-index: 0;
-    }
-
-    /* -------------------------------------------------------
-       CONTENITORE PRINCIPALE
-    ------------------------------------------------------- */
-    .container {
-      position: relative;
-      z-index: 2; /* Sopra overlay */
-      max-width: 90vw;
-      width: 100%;
-    }
-
-    /* -------------------------------------------------------
-       IMMAGINE MAIALINO
-    ------------------------------------------------------- */
     .pig {
-      width: clamp(80px, 30vw, 150px);
-      margin: 0 auto 1rem;
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 10px;
     }
 
     .pig img {
       width: 100%;
-      height: auto;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .title {
+      font-size: 2rem;
+      font-weight: bold;
+      line-height: 1;
+      text-align: center;
       display: block;
     }
 
-    /* -------------------------------------------------------
-       TITOLO (testo responsive)
-       - clamp(min, preferenziale, max)
-    ------------------------------------------------------- */
-    h1 {
-      font-size: clamp(1.5rem, 6vw, 3rem);
-      font-weight: bold;
-      line-height: 1.2;
-      white-space: pre-line;
-      word-break: break-word;
+    .title-line {
+      display: block;
+      margin: 0;
+      padding: 0;
     }
 
-    h1[lang="uk"] {
-      /* Se serve, potremmo applicare un font diverso per l'ucraino */
+    /* Effetto confetti */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
     }
 
-    /* -------------------------------------------------------
-       CONFETTI E EMOJI
-       - Tutti posizionati assoluti all'interno di #overlay
-    ------------------------------------------------------- */
-    .confetti,
-    .emoji {
+    .confetti, .emoji {
       position: absolute;
       top: -50px;
+      width: 10px;
+      height: 5px;
       opacity: 0.9;
+      border-radius: 2px;
       animation: floatDown linear infinite;
       z-index: 0;
     }
 
-    .confetti {
-      border-radius: 2px;
-      width: var(--confetti-w, 8px);
-      height: var(--confetti-h, 4px);
-      background-color: var(--confetti-color, #FFD700);
-    }
-
     .emoji {
-      font-size: clamp(1rem, 4vw, 2rem);
+      font-size: 24px;
       width: auto;
       height: auto;
     }
 
     @keyframes floatDown {
-      0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(100vh) rotate(360deg);
-        opacity: 0.3;
-      }
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0.3; }
     }
 
-    /* -------------------------------------------------------
-       PAVIMENTO (codice per i pezzetti a terra)
-    ------------------------------------------------------- */
     .floor {
-      position: fixed;
+      position: absolute;
       bottom: 0;
       left: 0;
       width: 100%;
@@ -140,134 +104,87 @@
     .floor-piece {
       position: absolute;
       bottom: 0;
+      width: 10px;
+      height: 5px;
       opacity: 0.4;
-      width: var(--floor-w, 8px);
-      height: var(--floor-h, 4px);
-      background-color: var(--floor-color, #FFB6C1);
-      transform: rotate(var(--floor-rot, 0deg));
     }
   </style>
 </head>
 <body>
 
-  <!-- OVERLAY per Confetti/Emoji -->
-  <div id="overlay" aria-hidden="true"></div>
+  <!-- Overlay con effetti -->
+  <div class="overlay" id="overlay"></div>
 
-  <!-- CONTENITORE PRINCIPALE -->
-  <main class="container" id="main-content">
-    <!-- Maialino festoso -->
-    <div class="pig" role="img" aria-label="Maialino festoso">
-      <img
-        src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcXA4azJ6cXdxYnlrbm1ibWU2a2c2cjY2YXIwOW5ycnluNGQ3a2JidyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/djdIFNI6MFup2/giphy.gif"
-        alt="Maialino festoso" />
+  <!-- Contenitore centrale -->
+  <div class="center-container">
+    <div class="pig">
+      <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcXA4azJ6cXdxYnlrbm1ibWU2a2c2cjY2YXIwOW5ycnluNGQ3a2JidyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/djdIFNI6MFup2/giphy.gif"  alt="Maialino festoso" />
     </div>
-
-    <!-- Titolo in ucraino (responsive) -->
-    <h1 lang="uk">
-      З Днем<br/>
-      народження, Бейлі!
+    <h1>
+      <span class="title title-line">З Днем</span><br/>
+      <span class="title title-line">народження, Бейлі!</span>
     </h1>
-  </main>
+  </div>
 
-  <!-- Audio (muted all'avvio, si sblocca al primo click) -->
-  <audio id="birthday-audio" src="/musica.mp3" autoplay loop playsinline muted></audio>
+  <!-- Audio -->
+  <audio id="birthday-audio" src="/musica.mp3" autoplay loop playsinline></audio>
 
   <script>
-    /* -------------------------------------------------------
-       COSTANTI E ELEMENTI
-    ------------------------------------------------------- */
     const colors = ['#FFB6C1', '#FFD700', '#98FB98', '#87CEEB', '#DDA0DD'];
     const overlay = document.getElementById('overlay');
-    const audio = document.getElementById('birthday-audio');
 
-    /* -------------------------------------------------------
-       FUNZIONE per generare un numero random tra min e max
-    ------------------------------------------------------- */
-    function getRandom(min, max) {
-      return Math.random() * (max - min) + min;
-    }
-
-    /* -------------------------------------------------------
-       CREA CONFETTI
-       - 70 pezzi con dimensioni, colori e timing casuali
-    ------------------------------------------------------- */
+    // Confetti
     for (let i = 0; i < 70; i++) {
       const confetti = document.createElement('div');
       confetti.classList.add('confetti');
-      // Colore casuale
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      confetti.style.setProperty('--confetti-color', color);
-      // Dimensioni casuali (larghezza 4-14px, altezza metà di larghezza)
-      const width  = getRandom(4, 14);
-      const height = width / 2;
-      confetti.style.setProperty('--confetti-w', `${width}px`);
-      confetti.style.setProperty('--confetti-h', `${height}px`);
-      // Posizione orizzontale random
-      confetti.style.left = `${getRandom(0, 100)}%`;
-      // Rotazione iniziale random
-      confetti.style.transform = `rotate(${getRandom(0, 360)}deg)`;
-      // Durata e ritardo animazione random
-      confetti.style.animationDuration = `${getRandom(3, 6)}s`;
-      confetti.style.animationDelay = `${getRandom(0, 2)}s`;
-
+      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.left = Math.random() * 100 + '%';
+      confetti.style.width = Math.random() * 10 + 4 + 'px';
+      confetti.style.height = (Math.random() * 10 + 4)/2 + 'px';
+      confetti.style.animationDuration = Math.random() * 3 + 3 + 's';
+      confetti.style.animationDelay = Math.random() * 2 + 's';
+      confetti.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
       overlay.appendChild(confetti);
     }
 
-    /* -------------------------------------------------------
-       CREA EMOJI
-       - Ogni emoji scende dall'alto con dimensione e timing casuali
-    ------------------------------------------------------- */
+    // Emoji a tema
     const emojis = ['🎂', '🎉', '🐷', '🎈'];
-    emojis.forEach(emojiChar => {
+    emojis.forEach(emoji => {
       for (let i = 0; i < 5; i++) {
         const span = document.createElement('div');
-        span.classList.add('emoji');
-        span.innerText = emojiChar;
-        span.style.left = `${getRandom(0, 100)}%`;
-        span.style.transform = `rotate(${getRandom(0, 360)}deg)`;
-        span.style.animationDuration = `${getRandom(3, 6)}s`;
-        span.style.animationDelay = `${getRandom(0, 2)}s`;
+        span.className = 'emoji';
+        span.innerText = emoji;
+        span.style.left = Math.random() * 100 + '%';
+        span.style.animationDuration = Math.random() * 3 + 3 + 's';
+        span.style.animationDelay = Math.random() * 2 + 's';
+        span.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
         overlay.appendChild(span);
       }
     });
 
-    /* -------------------------------------------------------
-       CREA “PAVIMENTO” (pezzi colorati a terra)
-       - 40 pezzi con dimensioni, colore e rotazione casuali
-    ------------------------------------------------------- */
+    // Accumulo sul fondo
     const floorContainer = document.createElement('div');
-    floorContainer.classList.add('floor');
+    floorContainer.className = 'floor';
     document.body.appendChild(floorContainer);
 
     for (let i = 0; i < 40; i++) {
       const piece = document.createElement('div');
-      piece.classList.add('floor-piece');
-      // Imposta colore casuale
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      piece.style.setProperty('--floor-color', color);
-      // Dimensioni casuali (larghezza 4-12px, altezza 2-6px)
-      const w = getRandom(4, 12);
-      const h = getRandom(2, 6);
-      piece.style.setProperty('--floor-w', `${w}px`);
-      piece.style.setProperty('--floor-h', `${h}px`);
-      // Rotazione casuale
-      const rot = getRandom(0, 360);
-      piece.style.setProperty('--floor-rot', `${rot}deg`);
-      // Posizione orizzontale
-      piece.style.left = `${getRandom(0, 100)}%`;
-
+      piece.className = 'floor-piece';
+      piece.style.left = Math.random() * 100 + '%';
+      piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.width = Math.random() * 8 + 4 + 'px';
+      piece.style.height = (Math.random() * 4 + 2) + 'px';
+      piece.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
       floorContainer.appendChild(piece);
     }
 
-    /* -------------------------------------------------------
-       AUTOPLAY AUDIO (si sblocca al primo click)
-    ------------------------------------------------------- */
+    // Riproduzione musica
+    const audio = document.getElementById('birthday-audio');
     const playAudio = async () => {
       try {
-        audio.muted = false;
         await audio.play();
       } catch (err) {
-        console.log("Autoplay bloccato. Tocca lo schermo per attivare l'audio.");
+        console.log("Autoplay bloccato. Devi interagire prima.");
       }
     };
 
